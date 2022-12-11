@@ -41,7 +41,8 @@ function close(){
     registerBlock.style.display="none";
     filmBackground.style.display="none";
     registerMessage.style.display="none";
-    registerContent.style.height="100%";
+    registerContent.style.height="322px";
+    registerSignInTo.style.top="70px";
     document.querySelector(".registerName").value="";
     document.querySelector(".registerEmail").value="";
     document.querySelector(".registerPassword").value="";
@@ -58,8 +59,33 @@ registerBtn.addEventListener('click',function(){
     registerEmail=document.querySelector(".registerEmail").value;
     registerPassword=document.querySelector(".registerPassword").value;
     registerData={"name":registerName,"email":registerEmail,"password":registerPassword};
-    postRegisterDataToBackEnd();
+    // postRegisterDataToBackEnd();
+    checkRegisterFront();
 },false)
+
+// ------------------------------------------------------------------
+function checkRegisterFront(){
+    console.log("前端檢查中");
+    let regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}$/i;
+    // console.log(regex.test(registerEmail));
+    if(registerName != "" & registerPassword != ""){
+        if(regex.test(registerEmail)==true & registerName != null & registerPassword != null){
+            console.log("通過前端");
+            postRegisterDataToBackEnd();
+        }else{
+            // responseFromBackend["message"]
+            responseFromBackend={"message":"請輸入正確信箱格式，點此重新輸入"};
+            dealRegistResponseFromBackend();
+        }
+    }else{
+        responseFromBackend={"message":"帳號密碼不可為空，點此重新輸入"};
+        dealRegistResponseFromBackend();
+    }
+    
+}
+
+// ------------------------------------------------------------------
+
 
 
 //post method to returndata to backend
@@ -103,7 +129,7 @@ function dealRegistResponseFromBackend(){
             close();
             filmBackground.style.display="block";
             registerBlock.style.display="flex";
-            registerContent.style.height="340px";
+            registerContent.style.height="322px";
             registerSignInTo.style.top="70px";
         },false)
     }
